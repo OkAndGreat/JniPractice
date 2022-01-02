@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.redrock.jnipractice.databinding.ActivityMainBinding;
 
@@ -13,6 +14,10 @@ public class MainActivity extends AppCompatActivity {
     static {
         System.loadLibrary("jnipractice");
     }
+
+    private String hello = "";
+
+    private static int age = 10;
 
     private ActivityMainBinding binding;
 
@@ -25,7 +30,20 @@ public class MainActivity extends AppCompatActivity {
 
         // Example of a call to a native method
         TextView tv = binding.sampleText;
-        tv.setText(stringFromJNI());
+//        tv.setText(stringFromJNI());
+        changeHello();
+        changeAge();
+        tv.setText(hello);
+
+        Toast.makeText(this,"age is " + age,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"3+4="+sum(3,4),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"3-4="+minus(3,4),Toast.LENGTH_SHORT).show();
+
+    }
+
+    //相减俩数供c++调用
+    private int minusInJava(int a,int b){
+        return a-b;
     }
 
     /**
@@ -33,4 +51,16 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+
+    /**
+     *  调用C++完成俩数相加
+     */
+    public native int sum(int a,int b);
+
+    public native void changeHello();
+
+    public native int minus(int a,int b);
+
+    private static native void changeAge();
+
 }
